@@ -2,7 +2,7 @@
 #include <TCL.h>
 
 const int LEDS = 50;
-const int NUM_COLORS = 8;
+const int NUM_COLORS = 9;
 const int FPS = 25;
 
 const bool MIXIN_POTS = false;
@@ -67,10 +67,9 @@ void rainbow_loop()
     {
         if (time >= change_time[i])
         {
-            change_time[i] = time + random(update_time_min, update_time_max);
-            {
-                current_color[i] = (current_color[i] + 1) % NUM_COLORS;
-            }
+            //change_time[i] = time + random(update_time_min, update_time_max);
+            change_time[i] = time + update_time_min + sin(time / 2000 + 6.28 * i / LEDS) * 100;
+            current_color[i] = (current_color[i] + 1) % NUM_COLORS;
         }
     }
 
@@ -148,7 +147,7 @@ void clear_strand()
 
 void assign_color(int led, int color)
 {
-    int tick = change_time[i] - millis();
+    int tick = change_time[led] - millis();
 
     if (tick < 200)
     {
@@ -191,11 +190,11 @@ void rainbow_init()
         current_color[i] = color;
         assign_color(i, color);
 
-        if (i % 5 == 4)
-        {
+        //if (i % 5 == 4)
+        //{
             //color = (color + 1) % NUM_COLORS;
-            color = random(0, NUM_COLORS);
-        }
+        //    color = random(0, NUM_COLORS);
+        //}
 
         change_time[i] = millis();
     }
@@ -243,11 +242,11 @@ void init_colors()
     color_values[BLUE][1]=0x00;
     color_values[BLUE][2]=0xa0;
 
-    color_values[PURPLE][0]=0x30;
+    color_values[PURPLE][0]=0x20;
     color_values[PURPLE][1]=0x00;
     color_values[PURPLE][2]=0x80;
 
-    color_values[WHITE][0]=0xa0;
+    color_values[WHITE][0]=0x90;
     color_values[WHITE][1]=0xa0;
     color_values[WHITE][2]=0x90;
 }
